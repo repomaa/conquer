@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+abort 'Usage: conquer bar.rb' if ARGV.empty?
+
+require 'conquer'
+require File.join(ENV['PWD'], ARGV[0])
