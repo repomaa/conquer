@@ -1,5 +1,6 @@
 require 'celluloid/current'
 require 'conquer/core_ext/numeric'
+require 'conquer/helpers'
 
 module Conquer
   class Segment
@@ -33,6 +34,7 @@ module Conquer
       private
 
       def wrapped_proc(block)
+        proc { Helpers.instance_eval(&block) }
       end
     end
 

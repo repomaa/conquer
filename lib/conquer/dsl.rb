@@ -1,10 +1,15 @@
 require 'conquer/segment'
 require 'conquer/scroller'
+require 'conquer/helpers'
 
 module Conquer
   class DSL
     def initialize(container)
       @container = container
+    end
+
+    def helpers(&block)
+      Helpers.singleton_class.class_eval(&block)
     end
 
     def separator(string = ' | ')
