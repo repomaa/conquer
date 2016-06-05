@@ -1,5 +1,4 @@
 require 'celluloid/current'
-require 'mkfifo'
 require 'json'
 
 module Conquer
@@ -8,9 +7,6 @@ module Conquer
     include Celluloid::Notifications
 
     def initialize
-      File.mkfifo(FIFO) unless File.exist?(FIFO)
-      @fifo = File.open(FIFO)
-
       async.run
     end
 
@@ -21,11 +17,16 @@ module Conquer
     private
 
     def run
-      loop do
-        command = JSON.parse(@fifo.gets)
-        public_send(command['method'], *(command['params'] || []))
+      File.mkfifo(FIFO) unless File.exist?(FIFO)
+      File.open(FIFO) do |fifo|
+        loop do
+          IO.select([fifo])
+          line = fifo.gets
+          next unless line
+          command = JSON.parse(line)
+          public_send(command['method'], *(command['params'] || []))
+        end
       end
     end
   end
 end
-
