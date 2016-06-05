@@ -1,6 +1,27 @@
 #!/usr/bin/env ruby
 
-abort 'Usage: conquer bar.rb' if ARGV.empty?
+require 'optparse'
+
+module Conquer
+  options = {}
+  parser = OptionParser.new do |p|
+    p.banner = 'Usage: conquer [options] bar.rb'
+    p.on('-f', '--fifo=PATH', 'use/create rpc fifo in PATH') do |path|
+      options[:fifo] = path
+    end
+
+    p.on('-h', '--help') do
+      puts p
+      exit
+    end
+  end
+
+  parser.parse!
+  abort(parser.to_s) if ARGV.empty?
+
+  runtime_dir = ENV['XDG_RUNTIME_DIR'] || "/run/user/#{ENV['UID']}"
+  FIFO = options[:fifo] || "#{runtime_dir}/conquer.fifo"
+end
 
 require 'conquer'
 
