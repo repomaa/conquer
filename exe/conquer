@@ -6,8 +6,8 @@ module Conquer
   options = {}
   parser = OptionParser.new do |p|
     p.banner = 'Usage: conquer [options] bar.rb'
-    p.on('-f', '--fifo=PATH', 'use/create rpc fifo in PATH') do |path|
-      options[:fifo] = path
+    p.on('-s', '--socket=PATH', 'use rpc socket in PATH') do |path|
+      options[:socket] = path
     end
 
     p.on('-h', '--help') do
@@ -20,11 +20,14 @@ module Conquer
   abort(parser.to_s) if ARGV.empty?
 
   runtime_dir = ENV['XDG_RUNTIME_DIR'] || "/run/user/#{ENV['UID']}"
-  FIFO = options[:fifo] || "#{runtime_dir}/conquer.fifo"
+  RPC_SOCKET = options[:socket] || "#{runtime_dir}/conquer.socket"
 end
 
-require 'conquer'
-
-file=ARGV[0]
-file.prepend("#{ENV['PWD']}/") unless file.start_with?('/')
-require File.join(file)
+begin
+  require 'conquer'
+  file = ARGV[0]
+  file.prepend("#{ENV['PWD']}/") unless file.start_with?('/')
+  require file
+ensure
+  File.delete(Conquer::RPC_SOCKET) if File.exist?(Conquer::RPC_SOCKET)
+end
