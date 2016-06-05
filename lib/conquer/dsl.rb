@@ -20,6 +20,8 @@ module Conquer
       end
     end
 
+    alias static separator
+
     def every(timespan, &block)
       @container.register(Segment, timespan, block)
     end
