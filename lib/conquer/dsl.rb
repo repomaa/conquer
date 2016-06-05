@@ -12,8 +12,12 @@ module Conquer
       Helpers.singleton_class.class_eval(&block)
     end
 
-    def separator(string = ' | ')
-      every(100.hours) { string }
+    def separator(string = ' | ', &block)
+      if block_given?
+        every(100.hours, &block)
+      else
+        every(100.hours) { string }
+      end
     end
 
     def every(timespan, &block)
