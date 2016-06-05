@@ -7,7 +7,9 @@ require 'conquer/rpc'
 module Conquer
   MAIN_TOPIC = 'conquer'.freeze
 
-  def self.bar(io = STDOUT, &block)
+  module_function
+
+  def bar(io = STDOUT, &block)
     main_container = Container.new(MAIN_TOPIC)
     dsl = DSL.new(main_container)
     dsl.instance_eval(&block)
