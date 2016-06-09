@@ -3,4 +3,7 @@
 abort 'Usage: conquer bar.rb' if ARGV.empty?
 
 require 'conquer'
-require File.join(ENV['PWD'], ARGV[0])
+
+file=ARGV[0]
+file.prepend("#{ENV['PWD']}/") unless file.start_with?('/')
+require File.join(file)
