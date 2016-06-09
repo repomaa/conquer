@@ -25,9 +25,11 @@ end
 
 begin
   require 'conquer'
-  file = ARGV[0]
-  file.prepend("#{ENV['PWD']}/") unless file.start_with?('/')
-  require file
+  conquer_file = ARGV[0].to_s
+  unless conquer_file.start_with?('/')
+    conquer_file = File.join(ENV['PWD'], conquer_file)
+  end
+  require conquer_file
 ensure
   File.delete(Conquer::RPC_SOCKET) if File.exist?(Conquer::RPC_SOCKET)
 end
