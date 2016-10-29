@@ -37,6 +37,8 @@ module Conquer
 
       def advance_scroll_position
         content_size = @content.size
+        return if content_size <= @options[:width]
+
         scroll_position = @scroll_position + @options[:step]
         margin = @options[:width] - @options[:step]
         scroll_position = 0 if scroll_position > (content_size - margin)
