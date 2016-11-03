@@ -18,6 +18,8 @@ module Conquer
       end
 
       def update_child_content(topic, content)
+        old_content = @child_content[topic]
+        return if content == old_content
         @child_content[topic] = content
         publish(@topic, render(@child_content))
       end
