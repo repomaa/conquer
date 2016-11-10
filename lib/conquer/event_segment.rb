@@ -22,7 +22,7 @@ module Conquer
 
       def wrapped_proc(block)
         proc do |*args|
-          Helpers.instance_eval { block.call(*args) }
+          Helpers.instance_exec { block.call(*args) }
         end
       end
     end
