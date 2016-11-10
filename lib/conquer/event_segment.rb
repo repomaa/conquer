@@ -21,9 +21,7 @@ module Conquer
       private
 
       def wrapped_proc(block)
-        proc do |*args|
-          Helpers.instance_exec { block.call(*args) }
-        end
+        proc { |*args| Helpers.instance_exec(*args, &block) }
       end
     end
 
