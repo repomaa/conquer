@@ -1,4 +1,5 @@
 require 'conquer/segment'
+require 'conquer/event_segment'
 require 'conquer/scroller'
 require 'conquer/helpers'
 
@@ -28,6 +29,10 @@ module Conquer
 
     def block(&block)
       every(0, &block)
+    end
+
+    def on(*events, &block)
+      @container.register(EventSegment, block, *events)
     end
 
     def scroll(options = {}, &block)
